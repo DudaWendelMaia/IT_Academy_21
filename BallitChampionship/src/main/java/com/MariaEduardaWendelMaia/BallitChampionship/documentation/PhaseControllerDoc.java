@@ -1,7 +1,6 @@
 package com.MariaEduardaWendelMaia.BallitChampionship.documentation;
 
-import com.MariaEduardaWendelMaia.BallitChampionship.dto.TeamCreateDTO;
-import com.MariaEduardaWendelMaia.BallitChampionship.dto.TeamDTO;
+import com.MariaEduardaWendelMaia.BallitChampionship.dto.PhaseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -11,49 +10,49 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-public interface TeamControllerDoc {
+public interface PhaseControllerDoc {
 
-    @Operation(summary = "Criar uma equipe.", description = "Cria uma nova equipe.")
+    @Operation(summary = "Criar uma fase.", description = "Cria uma nova fase.")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "Equipe criada com sucesso."),
+                    @ApiResponse(responseCode = "200", description = "Fase criada com sucesso."),
                     @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso."),
                     @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção.")
             }
     )
     @PostMapping
-    public ResponseEntity<TeamDTO> createTeam(@Valid @RequestBody TeamCreateDTO teamCreateDTO);
+    public ResponseEntity<PhaseDTO> createPhase(@Valid @RequestBody PhaseDTO phaseDTO);
 
-    @Operation(summary = "Listar equipes.", description = "Lista todas as equipes.")
+    @Operation(summary = "Listar fases.", description = "Lista todas as fases.")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "Lista de equipes retornada com sucesso."),
+                    @ApiResponse(responseCode = "200", description = "Lista de fases retornada com sucesso."),
                     @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso."),
                     @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção.")
             }
     )
     @GetMapping
-    public ResponseEntity<List<TeamDTO>> listTeams();
+    public ResponseEntity<List<PhaseDTO>> listPhases();
 
-    @Operation(summary = "Atualizar uma equipe.", description = "Atualiza uma equipe pelo ID.")
+    @Operation(summary = "Atualizar uma fase.", description = "Atualiza uma fase pelo ID.")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "Equipe atualizada com sucesso."),
+                    @ApiResponse(responseCode = "200", description = "Fase atualizada com sucesso."),
                     @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso."),
                     @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção.")
             }
     )
     @PutMapping("/{id}")
-    public ResponseEntity<TeamDTO> updateTeam(@PathVariable Integer id, @Valid @RequestBody TeamCreateDTO teamCreateDTO) throws Exception;
+    public ResponseEntity<PhaseDTO> updatePhase(@PathVariable Integer id, @Valid @RequestBody PhaseDTO phaseDTO) throws Exception;
 
-    @Operation(summary = "Deletar uma equipe.", description = "Deleta uma equipe pelo ID.")
+    @Operation(summary = "Deletar uma fase.", description = "Deleta uma fase pelo ID.")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "Equipe deletada com sucesso."),
+                    @ApiResponse(responseCode = "200", description = "Fase deletada com sucesso."),
                     @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso."),
                     @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção.")
             }
     )
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTeam(@PathVariable Integer id) throws Exception;
+    public ResponseEntity<Void> deletePhase(@PathVariable Integer id) throws Exception;
 }
