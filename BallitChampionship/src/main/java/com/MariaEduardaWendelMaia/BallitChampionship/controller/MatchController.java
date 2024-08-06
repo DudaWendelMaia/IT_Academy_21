@@ -43,4 +43,19 @@ public class MatchController {
         matchService.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/{id}/blot/{team}")
+    public ResponseEntity<MatchDTO> registerBlot(@PathVariable Integer id, @PathVariable String team) throws Exception {
+        return ResponseEntity.ok(matchService.registerBlot(id, team));
+    }
+
+    @PostMapping("/{id}/plif/{team}")
+    public ResponseEntity<MatchDTO> registerPlif(@PathVariable Integer id, @PathVariable String team) throws Exception {
+        return ResponseEntity.ok(matchService.registerPlif(id, team));
+    }
+
+    @PostMapping("/{id}/finish")
+    public ResponseEntity<MatchDTO> finishMatch(@PathVariable Integer id) throws Exception {
+        return ResponseEntity.ok(matchService.finishMatch(id));
+    }
 }

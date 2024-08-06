@@ -48,4 +48,36 @@ public class MatchService {
         return objectMapper.convertValue(matchRepository.findById(id)
                 .orElseThrow(() -> new Exception("Match not found!")), MatchDTO.class);
     }
+
+    public MatchDTO registerBlot(Integer id, String team) throws Exception {
+        Match match = matchRepository.findById(id)
+                .orElseThrow(() -> new Exception("Match not found!"));
+        if (team.equals("A")) {
+            match.setPointsTeamA(match.getPointsTeamA() + 5);
+        } else if (team.equals("B")) {
+            match.setPointsTeamB(match.getPointsTeamB() + 5);
+        }
+        Match updatedMatch = matchRepository.save(match);
+        return objectMapper.convertValue(updatedMatch, MatchDTO.class);
+    }
+
+    public MatchDTO registerPlif(Integer id, String team) throws Exception {
+        Match match = matchRepository.findById(id)
+                .orElseThrow(() -> new Exception("Match not found!"));
+        if (team.equals("A")) {
+            match.setPointsTeamA(match.getPointsTeamA() + 1);
+        } else if (team.equals("B")) {
+            match.setPointsTeamB(match.getPointsTeamB() + 1);
+        }
+        Match updatedMatch = matchRepository.save(match);
+        return objectMapper.convertValue(updatedMatch, MatchDTO.class);
+    }
+
+    public MatchDTO finishMatch(Integer id) throws Exception {
+        Match match = matchRepository.findById(id)
+                .orElseThrow(() -> new Exception("Match not found!"));
+        match.setFinished(true);
+        Match updatedMatch = matchRepository.save(match);
+        return objectMapper.convertValue(updatedMatch, MatchDTO.class);
+    }
 }
