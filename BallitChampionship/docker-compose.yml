@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  postgresql:
+    image: postgres
+    restart: always
+    container_name: ballit-postgresql
+    environment:
+      - POSTGRES_USER=ballit_championship
+      - POSTGRES_PASSWORD=a12345678
+      - POSTGRES_DB=ballit_db
+    ports:
+      - "5432:5432"

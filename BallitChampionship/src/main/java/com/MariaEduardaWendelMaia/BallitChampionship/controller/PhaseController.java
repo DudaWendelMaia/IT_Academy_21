@@ -1,6 +1,8 @@
 package com.MariaEduardaWendelMaia.BallitChampionship.controller;
 
 import com.MariaEduardaWendelMaia.BallitChampionship.dto.PhaseDTO;
+import com.MariaEduardaWendelMaia.BallitChampionship.entity.Match;
+import com.MariaEduardaWendelMaia.BallitChampionship.entity.Phase;
 import com.MariaEduardaWendelMaia.BallitChampionship.service.PhaseService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +17,11 @@ import java.util.List;
 public class PhaseController {
 
     private final PhaseService phaseService;
+
+    @GetMapping("/{id}")
+    public ResponseEntity<PhaseDTO> getPhaseById(@PathVariable Integer id) throws Exception {
+        return ResponseEntity.ok(phaseService.getPhase(id));
+    }
 
     @PostMapping
     public ResponseEntity<PhaseDTO> createPhase(@Valid @RequestBody PhaseDTO phaseDTO) {

@@ -2,6 +2,7 @@ package com.MariaEduardaWendelMaia.BallitChampionship.controller;
 
 import com.MariaEduardaWendelMaia.BallitChampionship.dto.TeamCreateDTO;
 import com.MariaEduardaWendelMaia.BallitChampionship.dto.TeamDTO;
+import com.MariaEduardaWendelMaia.BallitChampionship.entity.Match;
 import com.MariaEduardaWendelMaia.BallitChampionship.service.TeamService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,11 @@ import java.util.List;
 public class TeamController {
 
     private final TeamService teamService;
+
+    @GetMapping("/{id}")
+    public ResponseEntity<TeamDTO> getMatchById(@PathVariable Integer id) throws Exception {
+        return ResponseEntity.ok(teamService.getTeam(id));
+    }
 
     @PostMapping
     public ResponseEntity<TeamDTO> createTeam(@Valid @RequestBody TeamCreateDTO teamCreateDTO) {

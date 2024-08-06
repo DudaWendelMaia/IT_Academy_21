@@ -31,7 +31,8 @@ public class TeamService {
     }
 
     public TeamDTO update(Integer id, TeamCreateDTO teamCreateDTO) throws Exception {
-        Team teamRetrieved = getTeam(id);
+        Team teamRetrieved = teamRepository.findById(id)
+                .orElseThrow(() -> new Exception("Team not found!"));
         teamRetrieved.setName(teamCreateDTO.getName());
         teamRetrieved.setWarCry(teamCreateDTO.getWarCry());
         teamRetrieved.setFoundationYear(teamCreateDTO.getFoundationYear());
@@ -41,12 +42,11 @@ public class TeamService {
     }
 
     public void delete(Integer id) throws Exception {
-        Team teamRetrieved = getTeam(id);
-        teamRepository.deleteById(teamRetrieved.getId());
+        teamRepository.deleteById(id);
     }
 
-    private Team getTeam(Integer id) throws Exception {
-        return teamRepository.findById(id)
-                .orElseThrow(() -> new Exception("Team not found!"));
+    public TeamDTO getTeam(Integer id) throws Exception {
+        return objectMapper.convertValue(teamRepository.findById(id)
+                .orElseThrow(() -> new Exception("Team not found!")), TeamDTO.class);
     }
 }

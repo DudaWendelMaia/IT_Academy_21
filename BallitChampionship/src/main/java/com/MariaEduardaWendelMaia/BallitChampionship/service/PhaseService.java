@@ -31,7 +31,8 @@ public class PhaseService {
     }
 
     public PhaseDTO update(Integer id, PhaseDTO phaseDTO) throws Exception {
-        Phase phaseRetrieved = getPhase(id);
+        Phase phaseRetrieved = phaseRepository.findById(id)
+                .orElseThrow(() -> new Exception("Phase not found!"));
         phaseRetrieved.setMatches(phaseDTO.getMatches().stream()
                 .map(matchDTO -> objectMapper.convertValue(matchDTO, Match.class))
                 .collect(Collectors.toList()));
@@ -42,12 +43,11 @@ public class PhaseService {
     }
 
     public void delete(Integer id) throws Exception {
-        Phase phaseRetrieved = getPhase(id);
-        phaseRepository.deleteById(phaseRetrieved.getId());
+        phaseRepository.deleteById(id);
     }
 
-    private Phase getPhase(Integer id) throws Exception {
-        return phaseRepository.findById(id)
-                .orElseThrow(() -> new Exception("Phase not found!"));
+    public PhaseDTO getPhase(Integer id) throws Exception {
+        return objectMapper.convertValue(phaseRepository.findById(id)
+                .orElseThrow(() -> new Exception("Phase not found!")), PhaseDTO.class);
     }
 }

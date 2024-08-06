@@ -30,7 +30,8 @@ public class MatchService {
     }
 
     public MatchDTO update(Integer id, MatchDTO matchDTO) throws Exception {
-        Match matchRetrieved = getMatch(id);
+        Match matchRetrieved = matchRepository.findById(id)
+                .orElseThrow(() -> new Exception("Match not found!"));
         matchRetrieved.setPointsTeamA(matchDTO.getPointsTeamA());
         matchRetrieved.setPointsTeamB(matchDTO.getPointsTeamB());
         matchRetrieved.setFinished(matchDTO.isFinished());
@@ -40,12 +41,11 @@ public class MatchService {
     }
 
     public void delete(Integer id) throws Exception {
-        Match matchRetrieved = getMatch(id);
-        matchRepository.deleteById(matchRetrieved.getId());
+        matchRepository.deleteById(id);
     }
 
-    private Match getMatch(Integer id) throws Exception {
-        return matchRepository.findById(id)
-                .orElseThrow(() -> new Exception("Match not found!"));
+    public MatchDTO getMatch(Integer id) throws Exception {
+        return objectMapper.convertValue(matchRepository.findById(id)
+                .orElseThrow(() -> new Exception("Match not found!")), MatchDTO.class);
     }
 }
