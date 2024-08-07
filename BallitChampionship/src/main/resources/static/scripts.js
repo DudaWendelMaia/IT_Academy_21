@@ -42,8 +42,15 @@ function showSection(sectionId) {
     });
     document.getElementById(sectionId).classList.add('active');
 
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.classList.remove('active');
+    });
+    document.querySelector(`[onclick="showSection('${sectionId}')"]`).classList.add('active');
+
     if (sectionId === 'partida') {
         loadMatches();
+    } else if (sectionId === 'fases') {
+        loadPhases();
     } else if (sectionId === 'final') {
         loadFinalResults();
     }
@@ -59,14 +66,17 @@ async function loadMatches() {
         matches.forEach(match => {
             if (!match.finished) {
                 const matchElement = document.createElement('div');
+                matchElement.classList.add('card', 'mb-3');
                 matchElement.innerHTML = `
-                    <h3>${match.teamA.name} vs ${match.teamB.name}</h3>
-                    <p>Pontos: ${match.teamA.name} - ${match.pointsTeamA} | ${match.teamB.name} - ${match.pointsTeamB}</p>
-                    <button onclick="registerAction(${match.id}, 'blot', 'A')">Registrar Blot para ${match.teamA.name}</button>
-                    <button onclick="registerAction(${match.id}, 'blot', 'B')">Registrar Blot para ${match.teamB.name}</button>
-                    <button onclick="registerAction(${match.id}, 'plif', 'A')">Registrar Plif para ${match.teamA.name}</button>
-                    <button onclick="registerAction(${match.id}, 'plif', 'B')">Registrar Plif para ${match.teamB.name}</button>
-                    <button onclick="finishMatch(${match.id})">Encerrar Partida</button>
+                    <div class="card-body">
+                        <h5 class="card-title">${match.teamA.name} vs ${match.teamB.name}</h5>
+                        <p class="card-text">Pontos: ${match.teamA.name} - ${match.pointsTeamA} | ${match.teamB.name} - ${match.pointsTeamB}</p>
+                        <button class="btn btn-primary" onclick="registerAction(${match.id}, 'blot', 'A')">Registrar Blot para ${match.teamA.name}</button>
+                        <button class="btn btn-primary" onclick="registerAction(${match.id}, 'blot', 'B')">Registrar Blot para ${match.teamB.name}</button>
+                        <button class="btn btn-secondary" onclick="registerAction(${match.id}, 'plif', 'A')">Registrar Plif para ${match.teamA.name}</button>
+                        <button class="btn btn-secondary" onclick="registerAction(${match.id}, 'plif', 'B')">Registrar Plif para ${match.teamB.name}</button>
+                        <button class="btn btn-danger" onclick="finishMatch(${match.id})">Encerrar Partida</button>
+                    </div>
                 `;
                 partidaPanel.appendChild(matchElement);
             }
@@ -109,6 +119,71 @@ async function finishMatch(matchId) {
     }
 }
 
+async function loadPhases() {
+    try {
+        const response = await fetch('/phases');
+        const phases = await response.json();
+        const fasesResult = document.getElementById('fasesResult');
+        fasesResult.innerHTML = '';
+
+        phases.forEach(phase => {
+            const phaseElement = document.createElement('div');
+            phaseElement.classList.add('card', 'mb-3');
+            phaseElement.innerHTML = `
+                <div class="card-body">
+                    <h5 class="card-title">Fase ${phase.id}</h5>
+                    ${phase.matches.map(match => `
+                        <p class="card-text">${match.teamA.name} vs ${match.teamB.name} - ${match.pointsTeamA} : ${match.pointsTeamB} - ${match.finished ? 'Finalizada' : 'Pendente'}</p>
+                    `).join('')}
+                    ${phase.complete ? '' : `<button class="btn btn-success" onclick="completePhase(${phase.id})">Completar Fase</button>`}
+                </div>
+            `;
+            fasesResult.appendChild(phaseElement);
+        });
+
+        const nextPhaseButton = document.createElement('button');
+        nextPhaseButton.classList.add('btn', 'btn-primary');
+        nextPhaseButton.innerText = 'Criar Próxima Fase';
+        nextPhaseButton.onclick = createNextPhase;
+        fasesResult.appendChild(nextPhaseButton);
+
+    } catch (error) {
+        document.getElementById('fasesResult').innerText = `Erro ao carregar fases: ${error.message}`;
+    }
+}
+
+async function createNextPhase() {
+    try {
+        const response = await fetch('/phases/next', {
+            method: 'POST'
+        });
+
+        if (response.ok) {
+            loadPhases();
+        } else {
+            alert('Erro ao criar próxima fase.');
+        }
+    } catch (error) {
+        alert(`Erro ao criar próxima fase: ${error.message}`);
+    }
+}
+
+async function completePhase(phaseId) {
+    try {
+        const response = await fetch(`/phases/${phaseId}/complete`, {
+            method: 'POST'
+        });
+
+        if (response.ok) {
+            loadPhases();
+        } else {
+            alert('Erro ao completar fase.');
+        }
+    } catch (error) {
+        alert(`Erro ao completar fase: ${error.message}`);
+    }
+}
+
 async function loadFinalResults() {
     try {
         const resultsResponse = await fetch('/championship/results');
@@ -120,23 +195,27 @@ async function loadFinalResults() {
         const finalResultDiv = document.getElementById('finalResult');
         finalResultDiv.innerHTML = `
             <h3>Resultado Final</h3>
-            <table>
-                <tr>
-                    <th>Time</th>
-                    <th>Pontos</th>
-                    <th>Total de Blots</th>
-                    <th>Total de Plifs</th>
-                    <th>Total de Advrunghs</th>
-                </tr>
-                ${results.map(team => `
+            <table class="table table-striped">
+                <thead>
                     <tr>
-                        <td>${team.name}</td>
-                        <td>${team.points}</td>
-                        <td>${team.totalBlots}</td>
-                        <td>${team.totalPlifs}</td>
-                        <td>${team.totalAdvrunghs}</td>
+                        <th>Time</th>
+                        <th>Pontos</th>
+                        <th>Total de Blots</th>
+                        <th>Total de Plifs</th>
+                        <th>Total de Advrunghs</th>
                     </tr>
-                `).join('')}
+                </thead>
+                <tbody>
+                    ${results.map(team => `
+                        <tr>
+                            <td>${team.name}</td>
+                            <td>${team.points}</td>
+                            <td>${team.totalBlots}</td>
+                            <td>${team.totalPlifs}</td>
+                            <td>${team.totalAdvrunghs}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
             </table>
             <h3>Campeão: ${champion.name}</h3>
             <p>Grito de Guerra: ${champion.warCry}</p>

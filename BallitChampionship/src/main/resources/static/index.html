@@ -4,58 +4,64 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ballit Championship</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<header>
-    <h1>Ballit Championship</h1>
-    <nav>
-        <ul>
-            <li><a href="#" onclick="showSection('cadastro')">Cadastro de Times</a></li>
-            <li><a href="#" onclick="showSection('inicio')">Início do Campeonato</a></li>
-            <li><a href="#" onclick="showSection('fases')">Fases do Campeonato</a></li>
-            <li><a href="#" onclick="showSection('partida')">Administração de Partidas</a></li>
-            <li><a href="#" onclick="showSection('final')">Final do Campeonato</a></li>
-        </ul>
-    </nav>
+<header class="bg-dark text-white py-3">
+    <div class="container">
+        <h1 class="display-4">Ballit Championship</h1>
+        <nav>
+            <ul class="nav nav-pills">
+                <li class="nav-item"><a class="nav-link active" href="#" onclick="showSection('cadastro')">Cadastro de Times</a></li>
+                <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('inicio')">Início do Campeonato</a></li>
+                <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('fases')">Fases do Campeonato</a></li>
+                <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('partida')">Administração de Partidas</a></li>
+                <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('final')">Final do Campeonato</a></li>
+            </ul>
+        </nav>
+    </div>
 </header>
-<main>
+<main class="container mt-4">
     <section id="cadastro" class="content-section">
         <h2>Cadastro de Times</h2>
         <form id="cadastroForm">
-            <label for="teamName">Nome do Time:</label>
-            <input type="text" id="teamName" name="teamName" required>
-
-            <label for="warCry">Grito de Guerra:</label>
-            <input type="text" id="warCry" name="warCry" required>
-
-            <label for="foundationYear">Ano de Fundação:</label>
-            <input type="number" id="foundationYear" name="foundationYear" required>
-
-            <button type="submit">Cadastrar Time</button>
+            <div class="form-group">
+                <label for="teamName">Nome do Time:</label>
+                <input type="text" class="form-control" id="teamName" name="teamName" required>
+            </div>
+            <div class="form-group">
+                <label for="warCry">Grito de Guerra:</label>
+                <input type="text" class="form-control" id="warCry" name="warCry" required>
+            </div>
+            <div class="form-group">
+                <label for="foundationYear">Ano de Fundação:</label>
+                <input type="number" class="form-control" id="foundationYear" name="foundationYear" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Cadastrar Time</button>
         </form>
-        <div id="cadastroResult"></div>
+        <div id="cadastroResult" class="mt-3"></div>
     </section>
 
     <section id="inicio" class="content-section">
         <h2>Início do Campeonato</h2>
-        <button onclick="startChampionship()">Iniciar Campeonato</button>
-        <div id="inicioResult"></div>
+        <button class="btn btn-success" onclick="startChampionship()">Iniciar Campeonato</button>
+        <div id="inicioResult" class="mt-3"></div>
     </section>
 
     <section id="fases" class="content-section">
         <h2>Fases do Campeonato</h2>
-        <div id="fasesResult"></div>
+        <div id="fasesResult" class="mt-3"></div>
     </section>
 
     <section id="partida" class="content-section">
         <h2>Administração de Partidas</h2>
-        <div id="partidaPanel"></div>
+        <div id="partidaPanel" class="mt-3"></div>
     </section>
 
     <section id="final" class="content-section">
         <h2>Final do Campeonato</h2>
-        <div id="finalResult"></div>
+        <div id="finalResult" class="mt-3"></div>
     </section>
 </main>
 

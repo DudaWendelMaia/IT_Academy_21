@@ -43,4 +43,23 @@ public class PhaseController {
         phaseService.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/next")
+    public ResponseEntity<PhaseDTO> createNextPhase() {
+        try {
+            return ResponseEntity.ok(phaseService.createNextPhase());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+
+    @PostMapping("/{id}/complete")
+    public ResponseEntity<Void> completePhase(@PathVariable Integer id) {
+        try {
+            phaseService.completePhase(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 }
