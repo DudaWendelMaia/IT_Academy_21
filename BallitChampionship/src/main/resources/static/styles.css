@@ -1,29 +1,32 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa;
 }
 
 header {
-    background-color: #333;
+    background: linear-gradient(90deg, #8e2de2, #4a00e0);
     color: white;
+    padding: 20px 0;
 }
 
 header h1 {
+    font-size: 2.5rem;
+    font-weight: 600;
     margin: 0;
 }
 
-nav ul {
-    list-style: none;
-    padding: 0;
+.navbar {
+    background: linear-gradient(90deg, #8e2de2, #4a00e0);
 }
 
-nav ul li {
-    display: inline;
-    margin: 0 10px;
-}
-
-nav ul li a {
+.navbar .nav-link {
     color: white;
-    text-decoration: none;
+    font-weight: 600;
+}
+
+.navbar .nav-link.active {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
 }
 
 .content-section {
@@ -32,4 +35,8 @@ nav ul li a {
 
 .content-section.active {
     display: block;
+}
+
+.card {
+    margin-bottom: 20px;
 }
