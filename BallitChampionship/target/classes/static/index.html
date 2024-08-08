@@ -60,14 +60,14 @@
                     <input type="number" class="form-control" id="foundationYear" name="foundationYear" required>
                     <div class="invalid-feedback">Insira o ano de fundação.</div>
                 </div>
-                <button type="submit" class="btn btn-primary">Cadastrar Time</button>
+                <button type="submit" class="btn btn-primary register-button">Cadastrar Time</button>
             </form>
             <div id="registrationResult" class="mt-3 alert"></div>
         </section>
 
         <section id="championshipStart" class="content-section">
             <h2>▶️ Início</h2>
-            <button class="btn btn-success" onclick="startChampionship()">Iniciar Campeonato</button>
+            <button class="btn btn-success start-button" onclick="startChampionship()">Iniciar Campeonato</button>
             <div id="startResult" class="mt-3 alert"></div>
         </section>
 
@@ -82,7 +82,7 @@
             <div class="form-group">
                 <label for="penaltyTeamSelect">Advrungh: escolha o time para penalizar:</label>
                 <select class="form-control" id="penaltyTeamSelect"></select>
-                <button class="btn btn-warning mt-2" onclick="penalizeTeam()">Aplicar</button>
+                <button class="btn btn-warning penalty-button mt-2" onclick="penalizeTeam()">Aplicar</button>
             </div>
             <div id="motivationalMessage" class="mt-3 alert alert-info" style="display: none;"></div>
         </section>

@@ -61,11 +61,11 @@ async function loadMatches() {
                         <div class="card-body">
                             <h5 class="card-title">${match.teamA.name} vs ${match.teamB.name}</h5>
                             <p class="card-text">Pontos: ${match.teamA.name} - ${match.pointsTeamA} | ${match.teamB.name} - ${match.pointsTeamB}</p>
-                            <button class="btn btn-primary mr-1" onclick="registerAction(${match.id}, 'blot', 'A')">Blot para ${match.teamA.name}</button>
-                            <button class="btn btn-primary mr-1" onclick="registerAction(${match.id}, 'blot', 'B')">Blot para ${match.teamB.name}</button>
-                            <button class="btn btn-secondary mr-1" onclick="registerAction(${match.id}, 'plif', 'A')">Plif para ${match.teamA.name}</button>
-                            <button class="btn btn-secondary mr-1" onclick="registerAction(${match.id}, 'plif', 'B')">Plif para ${match.teamB.name}</button>
-                            <button class="btn btn-danger" onclick="finishMatch(${match.id})">Encerrar Partida</button>
+                            <button class="btn btn-primary blot-button" onclick="registerAction(${match.id}, 'blot', 'A')">Blot para ${match.teamA.name}</button>
+                            <button class="btn btn-primary blot-button" onclick="registerAction(${match.id}, 'blot', 'B')">Blot para ${match.teamB.name}</button>
+                            <button class="btn btn-secondary plif-button" onclick="registerAction(${match.id}, 'plif', 'A')">Plif para ${match.teamA.name}</button>
+                            <button class="btn btn-secondary plif-button" onclick="registerAction(${match.id}, 'plif', 'B')">Plif para ${match.teamB.name}</button>
+                            <button class="btn btn-danger finish-button" onclick="finishMatch(${match.id})">Encerrar Partida</button>
                         </div>
                     </div>
                 `);
@@ -137,14 +137,14 @@ async function loadPhases() {
                         ${phase.matches.map(match => `
                             <p class="card-text">${match.teamA.name} vs ${match.teamB.name} - ${match.pointsTeamA} : ${match.pointsTeamB} - ${match.finished ? 'Finalizada' : 'Pendente'}</p>
                         `).join('')}
-                        ${phase.complete ? '' : `<button class="btn btn-success" onclick="completePhase(${phase.id})">Completar Fase</button>`}
+                        ${phase.complete ? '' : `<button class="btn btn-success complete-phase-button" onclick="completePhase(${phase.id})">Completar Fase</button>`}
                     </div>
                 </div>
             `);
             phasesResult.append(phaseElement);
         });
 
-        const nextPhaseButton = $('<button class="btn btn-primary">Criar Próxima Fase</button>');
+        const nextPhaseButton = $('<button class="btn btn-primary next-phase-button">Criar Próxima Fase</button>');
         nextPhaseButton.click(createNextPhase);
         phasesResult.append(nextPhaseButton);
 

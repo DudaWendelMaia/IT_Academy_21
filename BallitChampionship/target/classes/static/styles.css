@@ -42,12 +42,12 @@ header h1 {
     margin-bottom: 20px;
 }
 
-.btn-primary, .btn-success, .btn-secondary, .btn-danger, .btn-warning {
+.register-button, .start-button, .blot-button, .plif-button, .finish-button, .penalty-button, .complete-phase-button, .next-phase-button {
     background-color: #8e2de2;
     border-color: #8e2de2;
 }
 
-.btn-primary:hover, .btn-success:hover, .btn-secondary:hover, .btn-danger:hover, .btn-warning:hover {
+.register-button:hover, .start-button:hover, .blot-button:hover, .plif-button:hover, .finish-button:hover, .penalty-button:hover, .complete-phase-button:hover, .next-phase-button:hover {
     background-color: #7328b6;
     border-color: #7328b6;
 }
