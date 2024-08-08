@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,6 +23,7 @@ public class PhaseService {
     private final PhaseRepository phaseRepository;
     private final MatchRepository matchRepository;
     private final ObjectMapper objectMapper;
+    private final Random random;
 
     public PhaseDTO create(PhaseDTO phaseDTO) {
         Phase phase = objectMapper.convertValue(phaseDTO, Phase.class);
@@ -68,7 +70,8 @@ public class PhaseService {
             } else if (match.getPointsTeamB() > match.getPointsTeamA()) {
                 advancingTeams.add(match.getTeamB());
             } else {
-                throw new Exception("Empate detectado. Desempate não implementado.");
+                //On draw, randomize which team wins
+                advancingTeams.add(random.nextBoolean() ? match.getTeamA() : match.getTeamB());
             }
         }
 

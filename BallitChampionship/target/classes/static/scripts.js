@@ -77,6 +77,20 @@ async function loadMatches() {
     }
 }
 
+async function startChampionship() {
+    try {
+        const response = await fetch('/championship/start', { method: 'POST' });
+
+        if (response.ok) {
+            $('#inicioResult').text('Campeonato iniciado com sucesso!').addClass('alert alert-success');
+        } else {
+            $('#inicioResult').text('Erro ao iniciar campeonato.').addClass('alert alert-danger');
+        }
+    } catch (error) {
+        $('#inicioResult').text(`Erro ao iniciar campeonato: ${error.message}`).addClass('alert alert-danger');
+    }
+}
+
 async function registerAction(matchId, action, team) {
     try {
         const url = `/matches/${matchId}/${action}/${team}`;

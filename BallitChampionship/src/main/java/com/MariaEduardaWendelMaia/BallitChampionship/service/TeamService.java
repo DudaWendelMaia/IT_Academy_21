@@ -61,7 +61,7 @@ public class TeamService {
 
     public String startChampionship() throws Exception {
         List<Team> teams = teamRepository.findAll();
-        if (teams.size() < 8 || teams.size() > 16 || teams.size() % 2 != 0) {
+        if (teams.size() != 8 && teams.size() != 16) {
             throw new Exception("Número inválido de times. Deve ser entre 8 e 16 e um número par.");
         }
 
@@ -76,7 +76,6 @@ public class TeamService {
             match.setFinished(false);
             matches.add(match);
         }
-
         Phase phase = new Phase();
         phase.setMatches(matches);
         phase.setComplete(false);

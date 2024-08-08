@@ -2,7 +2,6 @@ package com.MariaEduardaWendelMaia.BallitChampionship.controller;
 
 
 import com.MariaEduardaWendelMaia.BallitChampionship.dto.MatchDTO;
-import com.MariaEduardaWendelMaia.BallitChampionship.entity.Match;
 import com.MariaEduardaWendelMaia.BallitChampionship.service.MatchService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

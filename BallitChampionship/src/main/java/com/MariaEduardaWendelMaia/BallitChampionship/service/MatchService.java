@@ -31,7 +31,7 @@ public class MatchService {
 
     public MatchDTO update(Integer id, MatchDTO matchDTO) throws Exception {
         Match matchRetrieved = matchRepository.findById(id)
-                .orElseThrow(() -> new Exception("Match not found!"));
+                .orElseThrow(() -> new Exception("Partida não encontrada!"));
         matchRetrieved.setPointsTeamA(matchDTO.getPointsTeamA());
         matchRetrieved.setPointsTeamB(matchDTO.getPointsTeamB());
         matchRetrieved.setFinished(matchDTO.isFinished());
@@ -46,12 +46,12 @@ public class MatchService {
 
     public MatchDTO getMatch(Integer id) throws Exception {
         return objectMapper.convertValue(matchRepository.findById(id)
-                .orElseThrow(() -> new Exception("Match not found!")), MatchDTO.class);
+                .orElseThrow(() -> new Exception("Partida não encontrada!")), MatchDTO.class);
     }
 
     public MatchDTO registerBlot(Integer id, String team) throws Exception {
         Match match = matchRepository.findById(id)
-                .orElseThrow(() -> new Exception("Match not found!"));
+                .orElseThrow(() -> new Exception("Partida não encontrada!"));
         if (team.equals("A")) {
             match.setPointsTeamA(match.getPointsTeamA() + 5);
         } else if (team.equals("B")) {
@@ -63,7 +63,7 @@ public class MatchService {
 
     public MatchDTO registerPlif(Integer id, String team) throws Exception {
         Match match = matchRepository.findById(id)
-                .orElseThrow(() -> new Exception("Match not found!"));
+                .orElseThrow(() -> new Exception("Partida não encontrada!"));
         if (team.equals("A")) {
             match.setPointsTeamA(match.getPointsTeamA() + 1);
         } else if (team.equals("B")) {
@@ -75,7 +75,7 @@ public class MatchService {
 
     public MatchDTO finishMatch(Integer id) throws Exception {
         Match match = matchRepository.findById(id)
-                .orElseThrow(() -> new Exception("Match not found!"));
+                .orElseThrow(() -> new Exception("Partida não encontrada!"));
         match.setFinished(true);
         Match updatedMatch = matchRepository.save(match);
         return objectMapper.convertValue(updatedMatch, MatchDTO.class);
