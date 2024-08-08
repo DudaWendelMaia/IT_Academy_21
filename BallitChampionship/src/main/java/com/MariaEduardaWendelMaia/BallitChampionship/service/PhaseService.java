@@ -59,7 +59,8 @@ public class PhaseService {
     }
 
     public PhaseDTO createNextPhase() throws Exception {
-        List<Match> previousMatches = matchRepository.findAll().stream()
+        List<Match> previousMatches = matchRepository.findAll()
+                .stream()
                 .filter(Match::isFinished)
                 .collect(Collectors.toList());
 
@@ -70,7 +71,6 @@ public class PhaseService {
             } else if (match.getPointsTeamB() > match.getPointsTeamA()) {
                 advancingTeams.add(match.getTeamB());
             } else {
-                //On draw, randomize which team wins
                 advancingTeams.add(random.nextBoolean() ? match.getTeamA() : match.getTeamB());
             }
         }
@@ -107,7 +107,7 @@ public class PhaseService {
                 .allMatch(Match::isFinished);
 
         if (!allMatchesFinished) {
-            throw new Exception("Nem todas as partidas foram finalizadas.");
+            throw new Exception("Nem todas partidas foram finalizadas.");
         }
 
         phase.setComplete(true);

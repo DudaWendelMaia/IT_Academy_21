@@ -33,7 +33,8 @@ public class TeamService {
     }
 
     public List<TeamDTO> list() {
-        return teamRepository.findAll().stream()
+        return teamRepository.findAll()
+                .stream()
                 .map(team -> objectMapper.convertValue(team, TeamDTO.class))
                 .collect(Collectors.toList());
     }
@@ -80,7 +81,7 @@ public class TeamService {
         phase.setComplete(false);
         phaseRepository.save(phase);
 
-        return "Campeonato iniciado com sucesso!";
+        return "Campeonato iniciado!";
     }
 
     public List<TeamDTO> getFinalResults() {
