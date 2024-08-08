@@ -1,7 +1,7 @@
 $(document).ready(function() {
-    showSection('cadastro');
+    showSection('teamRegistration');
 
-    $('#cadastroForm').submit(async function(event) {
+    $('#teamRegistrationForm').submit(async function(event) {
         event.preventDefault();
         if (this.checkValidity() === false) {
             event.stopPropagation();
@@ -21,17 +21,17 @@ $(document).ready(function() {
 
                 if (response.ok) {
                     const result = await response.json();
-                    $('#cadastroResult').text(`Time ${result.name} cadastrado com sucesso!`).addClass('alert alert-success');
-                    $('#cadastroForm')[0].reset();
-                    $('#cadastroForm').removeClass('was-validated');
+                    $('#registrationResult').text(`Time ${result.name} cadastrado com sucesso!`).removeClass('alert-danger').addClass('alert-success');
+                    $('#teamRegistrationForm')[0].reset();
+                    $('#teamRegistrationForm').removeClass('was-validated');
                 } else {
-                    $('#cadastroResult').text('Erro ao cadastrar time.').addClass('alert alert-danger');
+                    $('#registrationResult').text('Erro ao cadastrar time.').removeClass('alert-success').addClass('alert-danger');
                 }
             } catch (error) {
-                $('#cadastroResult').text(`Erro ao cadastrar time: ${error.message}`).addClass('alert alert-danger');
+                $('#registrationResult').text(`Erro ao cadastrar time: ${error.message}`).removeClass('alert-success').addClass('alert-danger');
             }
         }
-        $('#cadastroForm').addClass('was-validated');
+        $('#teamRegistrationForm').addClass('was-validated');
     });
 });
 
@@ -42,17 +42,17 @@ function showSection(sectionId) {
     $('.nav-link').removeClass('active');
     $(`.nav-link[onclick="showSection('${sectionId}')"]`).addClass('active');
 
-    if (sectionId === 'partida') loadMatches();
-    else if (sectionId === 'fases') loadPhases();
-    else if (sectionId === 'final') loadFinalResults();
+    if (sectionId === 'matchManagement') loadMatches();
+    else if (sectionId === 'championshipPhases') loadPhases();
+    else if (sectionId === 'championshipFinal') loadFinalResults();
 }
 
 async function loadMatches() {
     try {
         const response = await fetch('/matches');
         const matches = await response.json();
-        const partidaPanel = $('#partidaPanel');
-        partidaPanel.empty();
+        const matchPanel = $('#matchPanel');
+        matchPanel.empty();
 
         matches.forEach(match => {
             if (!match.finished) {
@@ -69,11 +69,14 @@ async function loadMatches() {
                         </div>
                     </div>
                 `);
-                partidaPanel.append(matchElement);
+                matchPanel.append(matchElement);
             }
         });
+
+        loadTeamsForPenalty();
+
     } catch (error) {
-        $('#partidaPanel').text(`Erro ao carregar partidas: ${error.message}`).addClass('alert alert-danger');
+        $('#matchPanel').text(`Erro ao carregar partidas: ${error.message}`).removeClass('alert-success').addClass('alert-danger');
     }
 }
 
@@ -82,12 +85,12 @@ async function startChampionship() {
         const response = await fetch('/championship/start', { method: 'POST' });
 
         if (response.ok) {
-            $('#inicioResult').text('Campeonato iniciado com sucesso!').addClass('alert alert-success');
+            $('#startResult').text('Campeonato iniciado com sucesso!').removeClass('alert-danger').addClass('alert-success');
         } else {
-            $('#inicioResult').text('Erro ao iniciar campeonato.').addClass('alert alert-danger');
+            $('#startResult').text('Erro ao iniciar campeonato.').removeClass('alert-success').addClass('alert-danger');
         }
     } catch (error) {
-        $('#inicioResult').text(`Erro ao iniciar campeonato: ${error.message}`).addClass('alert alert-danger');
+        $('#startResult').text(`Erro ao iniciar campeonato: ${error.message}`).removeClass('alert-success').addClass('alert-danger');
     }
 }
 
@@ -118,8 +121,8 @@ async function loadPhases() {
     try {
         const response = await fetch('/phases');
         const phases = await response.json();
-        const fasesResult = $('#fasesResult');
-        fasesResult.empty();
+        const phasesResult = $('#phasesResult');
+        phasesResult.empty();
 
         phases.forEach(phase => {
             const phaseElement = $(`
@@ -133,15 +136,15 @@ async function loadPhases() {
                     </div>
                 </div>
             `);
-            fasesResult.append(phaseElement);
+            phasesResult.append(phaseElement);
         });
 
         const nextPhaseButton = $('<button class="btn btn-primary">Criar Próxima Fase</button>');
         nextPhaseButton.click(createNextPhase);
-        fasesResult.append(nextPhaseButton);
+        phasesResult.append(nextPhaseButton);
 
     } catch (error) {
-        $('#fasesResult').text(`Erro ao carregar fases: ${error.message}`).addClass('alert alert-danger');
+        $('#phasesResult').text(`Erro ao carregar fases: ${error.message}`).removeClass('alert-success').addClass('alert-danger');
     }
 }
 
@@ -205,6 +208,42 @@ async function loadFinalResults() {
             <p>Grito de Guerra: ${champion.warCry}</p>
         `);
     } catch (error) {
-        $('#finalResult').text(`Erro ao carregar resultados finais: ${error.message}`).addClass('alert alert-danger');
+        $('#finalResult').text(`Erro ao carregar resultados finais: ${error.message}`).removeClass('alert-success').addClass('alert-danger');
+    }
+}
+
+async function loadTeamsForPenalty() {
+    try {
+        const response = await fetch('/teams');
+        const teams = await response.json();
+        const penaltyTeamSelect = $('#penaltyTeamSelect');
+        penaltyTeamSelect.empty();
+
+        teams.forEach(team => {
+            const option = $(`<option value="${team.id}">${team.name}</option>`);
+            penaltyTeamSelect.append(option);
+        });
+    } catch (error) {
+        alert(`Erro ao carregar times: ${error.message}`);
+    }
+}
+
+async function penalizeTeam() {
+    const teamId = $('#penaltyTeamSelect').val();
+    if (!teamId) {
+        alert('Por favor, selecione um time para penalizar.');
+        return;
+    }
+
+    try {
+        const response = await fetch(`/teams/${teamId}/advrungh`, { method: 'POST' });
+        if (response.ok) {
+            alert('Penalização aplicada com sucesso.');
+            loadMatches();
+        } else {
+            alert('Erro ao aplicar penalização.');
+        }
+    } catch (error) {
+        alert(`Erro ao aplicar penalização: ${error.message}`);
     }
 }

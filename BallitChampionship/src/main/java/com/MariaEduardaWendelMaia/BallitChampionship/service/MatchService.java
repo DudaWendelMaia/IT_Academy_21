@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
@@ -16,6 +17,7 @@ public class MatchService {
 
     private final MatchRepository matchRepository;
     private final ObjectMapper objectMapper;
+    private final TeamService teamService;
 
     public MatchDTO create(MatchDTO matchDTO) {
         Match match = objectMapper.convertValue(matchDTO, Match.class);
@@ -52,11 +54,7 @@ public class MatchService {
     public MatchDTO registerBlot(Integer id, String team) throws Exception {
         Match match = matchRepository.findById(id)
                 .orElseThrow(() -> new Exception("Partida não encontrada!"));
-        if (team.equals("A")) {
-            match.setPointsTeamA(match.getPointsTeamA() + 5);
-        } else if (team.equals("B")) {
-            match.setPointsTeamB(match.getPointsTeamB() + 5);
-        }
+        teamService.updateMatchPoints(match, "blot", team);
         Match updatedMatch = matchRepository.save(match);
         return objectMapper.convertValue(updatedMatch, MatchDTO.class);
     }
@@ -64,11 +62,7 @@ public class MatchService {
     public MatchDTO registerPlif(Integer id, String team) throws Exception {
         Match match = matchRepository.findById(id)
                 .orElseThrow(() -> new Exception("Partida não encontrada!"));
-        if (team.equals("A")) {
-            match.setPointsTeamA(match.getPointsTeamA() + 1);
-        } else if (team.equals("B")) {
-            match.setPointsTeamB(match.getPointsTeamB() + 1);
-        }
+        teamService.updateMatchPoints(match, "plif", team);
         Match updatedMatch = matchRepository.save(match);
         return objectMapper.convertValue(updatedMatch, MatchDTO.class);
     }
@@ -76,6 +70,17 @@ public class MatchService {
     public MatchDTO finishMatch(Integer id) throws Exception {
         Match match = matchRepository.findById(id)
                 .orElseThrow(() -> new Exception("Partida não encontrada!"));
+
+        if (match.getPointsTeamA() == match.getPointsTeamB()) {
+            int extraPointsA = new Random().nextInt(10);
+            int extraPointsB = new Random().nextInt(10);
+            if (extraPointsA > extraPointsB) {
+                match.setPointsTeamA(match.getPointsTeamA() + 3);
+            } else {
+                match.setPointsTeamB(match.getPointsTeamB() + 3);
+            }
+        }
+
         match.setFinished(true);
         Match updatedMatch = matchRepository.save(match);
         return objectMapper.convertValue(updatedMatch, MatchDTO.class);

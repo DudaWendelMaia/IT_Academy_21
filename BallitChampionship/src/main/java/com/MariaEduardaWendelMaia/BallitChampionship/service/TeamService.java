@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,8 +22,8 @@ import java.util.stream.Collectors;
 public class TeamService {
 
     private final TeamRepository teamRepository;
-    private final MatchRepository matchRepository;
     private final PhaseRepository phaseRepository;
+    private final MatchRepository matchRepository;
     private final ObjectMapper objectMapper;
 
     public TeamDTO create(TeamCreateDTO teamCreateDTO) {
@@ -41,7 +40,7 @@ public class TeamService {
 
     public TeamDTO update(Integer id, TeamCreateDTO teamCreateDTO) throws Exception {
         Team teamRetrieved = teamRepository.findById(id)
-                .orElseThrow(() -> new Exception("Team not found!"));
+                .orElseThrow(() -> new Exception("Time não encontrado!"));
         teamRetrieved.setName(teamCreateDTO.getName());
         teamRetrieved.setWarCry(teamCreateDTO.getWarCry());
         teamRetrieved.setFoundationYear(teamCreateDTO.getFoundationYear());
@@ -56,7 +55,7 @@ public class TeamService {
 
     public TeamDTO getTeam(Integer id) throws Exception {
         return objectMapper.convertValue(teamRepository.findById(id)
-                .orElseThrow(() -> new Exception("Team not found!")), TeamDTO.class);
+                .orElseThrow(() -> new Exception("Time não encontrado!")), TeamDTO.class);
     }
 
     public String startChampionship() throws Exception {
@@ -86,6 +85,7 @@ public class TeamService {
 
     public List<TeamDTO> getFinalResults() {
         List<Team> teams = teamRepository.findAll();
+        teams.forEach(this::calculateTotalPoints);
         teams.sort((team1, team2) -> Integer.compare(team2.getPoints(), team1.getPoints()));
         return teams.stream()
                 .map(team -> objectMapper.convertValue(team, TeamDTO.class))
@@ -95,8 +95,45 @@ public class TeamService {
     public TeamDTO getChampion() {
         List<Team> teams = teamRepository.findAll();
         return teams.stream()
-                .max(Comparator.comparingInt(Team::getPoints))
+                .max((team1, team2) -> Integer.compare(team1.getPoints(), team2.getPoints()))
                 .map(team -> objectMapper.convertValue(team, TeamDTO.class))
                 .orElse(null);
+    }
+
+    public TeamDTO registerAdvrungh(Integer id) throws Exception {
+        Team team = teamRepository.findById(id)
+                .orElseThrow(() -> new Exception("Time não encontrado!"));
+        team.setPoints(team.getPoints() - 10);
+        team.setTotalAdvrunghs(team.getTotalAdvrunghs() + 1);
+        Team updatedTeam = teamRepository.save(team);
+        return objectMapper.convertValue(updatedTeam, TeamDTO.class);
+    }
+
+    public void updateMatchPoints(Match match, String action, String team) {
+        if ("blot".equals(action)) {
+            if ("A".equals(team)) {
+                match.setPointsTeamA(match.getPointsTeamA() + 5);
+                match.getTeamA().setTotalBlots(match.getTeamA().getTotalBlots() + 1);
+                match.getTeamA().setPoints(match.getTeamA().getPoints() + 5);
+            } else if ("B".equals(team)) {
+                match.setPointsTeamB(match.getPointsTeamB() + 5);
+                match.getTeamB().setTotalBlots(match.getTeamB().getTotalBlots() + 1);
+                match.getTeamB().setPoints(match.getTeamB().getPoints() + 5);
+            }
+        } else if ("plif".equals(action)) {
+            if ("A".equals(team)) {
+                match.setPointsTeamA(match.getPointsTeamA() + 1);
+                match.getTeamA().setTotalPlifs(match.getTeamA().getTotalPlifs() + 1);
+                match.getTeamA().setPoints(match.getTeamA().getPoints() + 1);
+            } else if ("B".equals(team)) {
+                match.setPointsTeamB(match.getPointsTeamB() + 1);
+                match.getTeamB().setTotalPlifs(match.getTeamB().getTotalPlifs() + 1);
+                match.getTeamB().setPoints(match.getTeamB().getPoints() + 1);
+            }
+        }
+    }
+
+    private void calculateTotalPoints(Team team) {
+        team.setPoints(50 + (team.getTotalBlots() * 5) + team.getTotalPlifs() - (team.getTotalAdvrunghs() * 10));
     }
 }

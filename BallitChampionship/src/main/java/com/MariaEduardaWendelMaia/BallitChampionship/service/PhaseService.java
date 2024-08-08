@@ -39,7 +39,7 @@ public class PhaseService {
 
     public PhaseDTO update(Integer id, PhaseDTO phaseDTO) throws Exception {
         Phase phaseRetrieved = phaseRepository.findById(id)
-                .orElseThrow(() -> new Exception("Phase not found!"));
+                .orElseThrow(() -> new Exception("Fase não encontrada!"));
         phaseRetrieved.setMatches(phaseDTO.getMatches().stream()
                 .map(matchDTO -> objectMapper.convertValue(matchDTO, Match.class))
                 .collect(Collectors.toList()));
@@ -55,7 +55,7 @@ public class PhaseService {
 
     public PhaseDTO getPhase(Integer id) throws Exception {
         return objectMapper.convertValue(phaseRepository.findById(id)
-                .orElseThrow(() -> new Exception("Phase not found!")), PhaseDTO.class);
+                .orElseThrow(() -> new Exception("Fase não encontrada!")), PhaseDTO.class);
     }
 
     public PhaseDTO createNextPhase() throws Exception {
@@ -101,13 +101,13 @@ public class PhaseService {
 
     public void completePhase(Integer phaseId) throws Exception {
         Phase phase = phaseRepository.findById(phaseId)
-                .orElseThrow(() -> new Exception("Phase not found!"));
+                .orElseThrow(() -> new Exception("Fase não encontrada!"));
 
         boolean allMatchesFinished = phase.getMatches().stream()
                 .allMatch(Match::isFinished);
 
         if (!allMatchesFinished) {
-            throw new Exception("Nem todas as partidas da fase foram finalizadas.");
+            throw new Exception("Nem todas as partidas foram finalizadas.");
         }
 
         phase.setComplete(true);

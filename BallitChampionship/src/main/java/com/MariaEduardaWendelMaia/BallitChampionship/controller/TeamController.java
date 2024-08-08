@@ -43,4 +43,19 @@ public class TeamController {
         teamService.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/{id}/advrungh")
+    public ResponseEntity<TeamDTO> registerAdvrungh(@PathVariable Integer id) throws Exception {
+        return ResponseEntity.ok(teamService.registerAdvrungh(id));
+    }
+
+    @GetMapping("/results")
+    public ResponseEntity<List<TeamDTO>> getFinalResults() {
+        return ResponseEntity.ok(teamService.getFinalResults());
+    }
+
+    @GetMapping("/champion")
+    public ResponseEntity<TeamDTO> getChampion() {
+        return ResponseEntity.ok(teamService.getChampion());
+    }
 }
