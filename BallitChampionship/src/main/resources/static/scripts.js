@@ -60,7 +60,7 @@ async function loadMatches() {
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">${match.teamA.name} vs ${match.teamB.name}</h5>
-                            <p class="card-text">Pontos: ${match.teamA.name} - ${match.pointsTeamA} | ${match.teamB.name} - ${match.pointsTeamB}</p>
+                            <p class="card-text">🟣 Pontos -> ${match.teamA.name} = ${match.pointsTeamA} | ${match.teamB.name} = ${match.pointsTeamB}</p>
                             <button class="btn btn-primary blot-button" onclick="registerAction(${match.id}, 'blot', 'A')">Blot para ${match.teamA.name}</button>
                             <button class="btn btn-primary blot-button" onclick="registerAction(${match.id}, 'blot', 'B')">Blot para ${match.teamB.name}</button>
                             <button class="btn btn-secondary plif-button" onclick="registerAction(${match.id}, 'plif', 'A')">Plif para ${match.teamA.name}</button>
@@ -133,9 +133,9 @@ async function loadPhases() {
             const phaseElement = $(`
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Fase ${phase.id}</h5>
+                        <h5 class="card-title">🟣 Fase ${phase.id}</h5>
                         ${phase.matches.map(match => `
-                            <p class="card-text">${match.teamA.name} vs ${match.teamB.name} - ${match.pointsTeamA} : ${match.pointsTeamB} - ${match.finished ? 'Finalizada' : 'Pendente'}</p>
+                            <p class="card-text">➖ ${match.teamA.name} vs ${match.teamB.name} -> ${match.pointsTeamA} : ${match.pointsTeamB} -> ${match.finished ? 'Finalizada' : 'Pendente'}</p>
                         `).join('')}
                         ${phase.complete ? '' : `<button class="btn btn-success complete-phase-button" onclick="completePhase(${phase.id})">Completar Fase</button>`}
                     </div>
