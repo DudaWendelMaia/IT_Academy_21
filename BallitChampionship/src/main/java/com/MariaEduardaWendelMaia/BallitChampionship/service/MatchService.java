@@ -18,6 +18,7 @@ public class MatchService {
     private final MatchRepository matchRepository;
     private final ObjectMapper objectMapper;
     private final TeamService teamService;
+    private final MessageService motivationalMessageService;
 
     public MatchDTO create(MatchDTO matchDTO) {
         Match match = objectMapper.convertValue(matchDTO, Match.class);
@@ -83,6 +84,9 @@ public class MatchService {
 
         match.setFinished(true);
         Match updatedMatch = matchRepository.save(match);
-        return objectMapper.convertValue(updatedMatch, MatchDTO.class);
+        String message = motivationalMessageService.getRandomMessage();
+        MatchDTO matchDTO = objectMapper.convertValue(updatedMatch, MatchDTO.class);
+        matchDTO.setMotivationalMessage(message);
+        return matchDTO;
     }
 }

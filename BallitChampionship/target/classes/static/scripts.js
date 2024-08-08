@@ -21,14 +21,14 @@ $(document).ready(function() {
 
                 if (response.ok) {
                     const result = await response.json();
-                    $('#registrationResult').text(`Time ${result.name} cadastrado com sucesso!`).removeClass('alert-danger').addClass('alert-success');
+                    $('#registrationResult').text(`✔️ Time ${result.name} cadastrado com sucesso!`).removeClass('alert-danger').addClass('alert-success');
                     $('#teamRegistrationForm')[0].reset();
                     $('#teamRegistrationForm').removeClass('was-validated');
                 } else {
-                    $('#registrationResult').text('Erro ao cadastrar time.').removeClass('alert-success').addClass('alert-danger');
+                    $('#registrationResult').text('❌ Erro ao cadastrar time.').removeClass('alert-success').addClass('alert-danger');
                 }
             } catch (error) {
-                $('#registrationResult').text(`Erro ao cadastrar time: ${error.message}`).removeClass('alert-success').addClass('alert-danger');
+                $('#registrationResult').text(`❌Erro ao cadastrar time: ${error.message}`).removeClass('alert-success').addClass('alert-danger');
             }
         }
         $('#teamRegistrationForm').addClass('was-validated');
@@ -61,10 +61,10 @@ async function loadMatches() {
                         <div class="card-body">
                             <h5 class="card-title">${match.teamA.name} vs ${match.teamB.name}</h5>
                             <p class="card-text">Pontos: ${match.teamA.name} - ${match.pointsTeamA} | ${match.teamB.name} - ${match.pointsTeamB}</p>
-                            <button class="btn btn-primary mr-1" onclick="registerAction(${match.id}, 'blot', 'A')">Registrar Blot para ${match.teamA.name}</button>
-                            <button class="btn btn-primary mr-1" onclick="registerAction(${match.id}, 'blot', 'B')">Registrar Blot para ${match.teamB.name}</button>
-                            <button class="btn btn-secondary mr-1" onclick="registerAction(${match.id}, 'plif', 'A')">Registrar Plif para ${match.teamA.name}</button>
-                            <button class="btn btn-secondary mr-1" onclick="registerAction(${match.id}, 'plif', 'B')">Registrar Plif para ${match.teamB.name}</button>
+                            <button class="btn btn-primary mr-1" onclick="registerAction(${match.id}, 'blot', 'A')">Blot para ${match.teamA.name}</button>
+                            <button class="btn btn-primary mr-1" onclick="registerAction(${match.id}, 'blot', 'B')">Blot para ${match.teamB.name}</button>
+                            <button class="btn btn-secondary mr-1" onclick="registerAction(${match.id}, 'plif', 'A')">Plif para ${match.teamA.name}</button>
+                            <button class="btn btn-secondary mr-1" onclick="registerAction(${match.id}, 'plif', 'B')">Plif para ${match.teamB.name}</button>
                             <button class="btn btn-danger" onclick="finishMatch(${match.id})">Encerrar Partida</button>
                         </div>
                     </div>
@@ -76,7 +76,7 @@ async function loadMatches() {
         loadTeamsForPenalty();
 
     } catch (error) {
-        $('#matchPanel').text(`Erro ao carregar partidas: ${error.message}`).removeClass('alert-success').addClass('alert-danger');
+        $('#matchPanel').text(`❌ Erro ao carregar partidas: ${error.message}`).removeClass('alert-success').addClass('alert-danger');
     }
 }
 
@@ -85,12 +85,12 @@ async function startChampionship() {
         const response = await fetch('/championship/start', { method: 'POST' });
 
         if (response.ok) {
-            $('#startResult').text('Campeonato iniciado com sucesso!').removeClass('alert-danger').addClass('alert-success');
+            $('#startResult').text('✔️ Campeonato iniciado com sucesso!').removeClass('alert-danger').addClass('alert-success');
         } else {
-            $('#startResult').text('Erro ao iniciar campeonato.').removeClass('alert-success').addClass('alert-danger');
+            $('#startResult').text('❌ Erro ao iniciar campeonato.').removeClass('alert-success').addClass('alert-danger');
         }
     } catch (error) {
-        $('#startResult').text(`Erro ao iniciar campeonato: ${error.message}`).removeClass('alert-success').addClass('alert-danger');
+        $('#startResult').text(`❌ Erro ao iniciar campeonato: ${error.message}`).removeClass('alert-success').addClass('alert-danger');
     }
 }
 
@@ -100,9 +100,9 @@ async function registerAction(matchId, action, team) {
         const response = await fetch(url, { method: 'POST' });
 
         if (response.ok) loadMatches();
-        else alert('Erro ao registrar ação.');
+        else alert('❌ Erro ao registrar ação.');
     } catch (error) {
-        alert(`Erro ao registrar ação: ${error.message}`);
+        alert(`❌ Erro ao registrar ação: ${error.message}`);
     }
 }
 
@@ -110,10 +110,15 @@ async function finishMatch(matchId) {
     try {
         const response = await fetch(`/matches/${matchId}/finish`, { method: 'POST' });
 
-        if (response.ok) loadMatches();
-        else alert('Erro ao encerrar partida.');
+        if (response.ok) {
+            const match = await response.json();
+            $('#motivationalMessage').text(`${match.motivationalMessage}`).show();
+            loadMatches();
+        } else {
+            alert('❌ Erro ao encerrar partida.');
+        }
     } catch (error) {
-        alert(`Erro ao encerrar partida: ${error.message}`);
+        alert(`❌ Erro ao encerrar partida: ${error.message}`);
     }
 }
 
@@ -144,7 +149,7 @@ async function loadPhases() {
         phasesResult.append(nextPhaseButton);
 
     } catch (error) {
-        $('#phasesResult').text(`Erro ao carregar fases: ${error.message}`).removeClass('alert-success').addClass('alert-danger');
+        $('#phasesResult').text(`❌ Erro ao carregar fases: ${error.message}`).removeClass('alert-success').addClass('alert-danger');
     }
 }
 
@@ -153,9 +158,9 @@ async function createNextPhase() {
         const response = await fetch('/phases/next', { method: 'POST' });
 
         if (response.ok) loadPhases();
-        else alert('Erro ao criar próxima fase.');
+        else alert('❌ Erro ao criar próxima fase.');
     } catch (error) {
-        alert(`Erro ao criar próxima fase: ${error.message}`);
+        alert(`❌ Erro ao criar próxima fase: ${error.message}`);
     }
 }
 
@@ -164,9 +169,9 @@ async function completePhase(phaseId) {
         const response = await fetch(`/phases/${phaseId}/complete`, { method: 'POST' });
 
         if (response.ok) loadPhases();
-        else alert('Erro ao completar fase.');
+        else alert('❌ Erro ao completar fase.');
     } catch (error) {
-        alert(`Erro ao completar fase: ${error.message}`);
+        alert(`❌ Erro ao completar fase: ${error.message}`);
     }
 }
 
@@ -187,9 +192,9 @@ async function loadFinalResults() {
                     <tr>
                         <th>Time</th>
                         <th>Pontos</th>
-                        <th>Total de Blots</th>
-                        <th>Total de Plifs</th>
-                        <th>Total de Advrunghs</th>
+                        <th>Total Blots</th>
+                        <th>Total Plifs</th>
+                        <th>Total Advrunghs</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -204,11 +209,11 @@ async function loadFinalResults() {
                     `).join('')}
                 </tbody>
             </table>
-            <h3>Campeão: ${champion.name}</h3>
-            <p>Grito de Guerra: ${champion.warCry}</p>
+            <h3>🥇 Campeão: ${champion.name}</h3>
+            <p>⚔️ Grito de Guerra -> ${champion.warCry}</p>
         `);
     } catch (error) {
-        $('#finalResult').text(`Erro ao carregar resultados finais: ${error.message}`).removeClass('alert-success').addClass('alert-danger');
+        $('#finalResult').text(`❌ Erro ao carregar resultados finais: ${error.message}`).removeClass('alert-success').addClass('alert-danger');
     }
 }
 
@@ -224,26 +229,26 @@ async function loadTeamsForPenalty() {
             penaltyTeamSelect.append(option);
         });
     } catch (error) {
-        alert(`Erro ao carregar times: ${error.message}`);
+        alert(`❌ Erro ao carregar times: ${error.message}`);
     }
 }
 
 async function penalizeTeam() {
     const teamId = $('#penaltyTeamSelect').val();
     if (!teamId) {
-        alert('Por favor, selecione um time para penalizar.');
+        alert('Selecione um time para penalizar.');
         return;
     }
 
     try {
         const response = await fetch(`/teams/${teamId}/advrungh`, { method: 'POST' });
         if (response.ok) {
-            alert('Penalização aplicada com sucesso.');
+            alert('✔️ Penalização aplicada com sucesso.');
             loadMatches();
         } else {
-            alert('Erro ao aplicar penalização.');
+            alert('❌ Erro ao aplicar penalização.');
         }
     } catch (error) {
-        alert(`Erro ao aplicar penalização: ${error.message}`);
+        alert(`❌ Erro ao aplicar penalização: ${error.message}`);
     }
 }

@@ -10,4 +10,5 @@ public class MatchDTO {
     private int pointsTeamA;
     private int pointsTeamB;
     private boolean finished;
+    private String motivationalMessage;
 }
