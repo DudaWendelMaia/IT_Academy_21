@@ -1,65 +1,46 @@
-# 💻 IT Academy 21
+# 💻 Ballit Championship (IT Academy 21)
+
 
 <div align="center">
  <img height=170 width=200 src="https://media.tenor.com/_mYZWyrW3AUAAAAi/peach-goma-pc-night-keyboard-smashing.gif">
 </div>
 
-### ℹ️ Informações
+## 📝 Descrição
+Sistema para gerenciar pontuações do campeonato de BALLIT, um jogo esquisito.
 
--   **Linguagem:**  Java
--   **Data de Realização:**
--   **Programa:** Exercício técnico do programa IT Academy – Edição #21
--   **Link do Repositório:**  [Repositório](https://github.com/DudaWendelMaia/IT_Academy_21.git)
+## 🔧 Como Executar
 
-### 🎯 Enunciado
-- Ballit Championship -> Campeonato de um jogo esquisito :)
-- Deseja-se desenvolver um sistema para gerenciar pontuações do campeonato internacional de
-BALLIT, um jogo esquisito, onde tenha:
-  - 1 -> Cadastro; 
-  - 2 -> Início; 
-  - 3 -> Fases; 
-  - 4 -> Partida; 
-  - 5 -> Final;
-  - 6 -> Feature Extra.
+### Passo 1: Configurar o Banco de Dados
 
-### 🌟 Sobre a Aplicação
+O banco de dados é configurado para ser executado em um container Docker.
 
+- Inicie o banco de dados com o Docker Compose:
 - 
+   ```bash
+   docker compose up
+   ```
+  
+Isso vai baixar a imagem do PostgreSQL, configurar e iniciar o container com o banco de dados.
 
-## 🗂️ Estrutura da Pasta
+### Passo 2: Executar a Aplicação
 
-Abaixo, você encontra a organização dos conteúdos presentes nesta pasta:
+1. Compile as dependencias do projeto utilizando o Maven
+2. Execute a aplicação
+3. A aplicação ficará em `http://localhost:8080`(frontend).
 
-```
-📁 BallitChampionship
-├── 📁 src
-│   ├── 📁 controllers
-│       ├── 📄 .java
-│       ├── 📄 .java
-└── 📄 README.md
-```
+### Frontend
 
-### 🧩 Arquivos
+- O frontend da aplicação tá dentro do projeto e é acessada pelo navegador. 
+  - Para acessar a interface gráfica: `http://localhost:8080`
 
-O projeto é composto pelos seguintes arquivos:
+### API Endpoints
 
-- `Main.java:` Classe principal que inicializa a aplicação.
+- A documentação da API está disponível pelo Swagger:
+  - `http://localhost:8080/swagger-ui.html`
 
-### 🚀 Features
+### Observações
 
-- **Cadastro:** texto
-- **Início:** texto
-- **Fases:** texto
-- **Partida:** texto
-- **Final:** texto
-- **Feature Extra:** texto
+- Cuidado pra porta 5432 (que é a do PostgreSQL) e a porta 8080 (que é a do Spring Boot) estarem livres, se não vai dar conflito.
+- O banco de dados está no container Docker, que vai fazer com que os dados não sejam perdidos entre reinicializações.
 
-### 🔧 Como Utilizar
-
-1. Clone o repositório em: [Repositório](https://github.com/DudaWendelMaia/IT_Academy_21.git)
-2. Abra o projeto em sua IDE.
-3. Execute o arquivo `Main.java` para iniciar a aplicação.
-
----
-
-Espero que tenha gostado! 🚀✨
+Obrigada! 🚀✨
